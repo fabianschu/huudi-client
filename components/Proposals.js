@@ -1,19 +1,19 @@
-import { useEffect } from 'react'
-import { utils } from '@snapshot-labs/snapshot.js'
+import { useEffect } from "react";
+import { utils } from "@snapshot-labs/snapshot.js";
 
 const Proposals = () => {
-  const { subgraphRequest } = utils
+  const { subgraphRequest } = utils;
 
   useEffect(() => {
     const getProposals = async () => {
-      const hub = 'https://hub.snapshot.org/graphql'
+      const hub = "https://hub.snapshot.org/graphql";
       const proposals = await subgraphRequest(hub, {
         proposals: {
           __args: {
             first: 100,
             where: {
-              space_in: ['fuschu.eth'],
-              state: 'closed',
+              space_in: ["fuschu.eth"],
+              state: "closed",
             },
           },
           id: true,
@@ -23,15 +23,15 @@ const Proposals = () => {
             strategies: { name: true, network: true, params: true },
           },
         },
-      })
-      return proposals
-    }
+      });
+      return proposals;
+    };
 
     getProposals()
       .then((r) => console.log(r))
-      .catch((e) => console.log(e))
-  }, [])
-  return <div>Proposals</div>
-}
+      .catch((e) => console.log(e));
+  }, []);
+  return <div>Proposals</div>;
+};
 
-export default Proposals
+export default Proposals;
