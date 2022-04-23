@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import snapshot from "@snapshot-labs/snapshot.js";
 import { Web3Context } from "../context/Web3Context";
-import { providers } from "ethers";
 
 const NewProposal = (props) => {
   const [space, setSpace] = useState("select space");
@@ -70,8 +69,7 @@ const NewProposal = (props) => {
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
-  console.log(hub.spaces);
-  console.log(space);
+
   return (
     <div>
       <h1>New Proposal</h1>
