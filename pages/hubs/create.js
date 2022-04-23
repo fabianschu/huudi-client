@@ -27,7 +27,6 @@ const create = () => {
   };
 
   const handleSearchClick = async (e) => {
-    console.log(config);
     const { spaces } = await subgraphRequest(config.snapshotGraphUrl, {
       spaces: {
         __args: {

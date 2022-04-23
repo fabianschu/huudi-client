@@ -1,37 +1,32 @@
-import { useEffect } from "react";
-import { utils } from "@snapshot-labs/snapshot.js";
+const Proposals = (props) => {
+  const { proposals } = props;
 
-const Proposals = () => {
-  const { subgraphRequest } = utils;
-
-  useEffect(() => {
-    const getProposals = async () => {
-      const hub = "https://hub.snapshot.org/graphql";
-      const proposals = await subgraphRequest(hub, {
-        proposals: {
-          __args: {
-            first: 100,
-            where: {
-              space_in: ["fuschu.eth"],
-              state: "closed",
-            },
-          },
-          id: true,
-          created: true,
-          space: {
-            id: true,
-            strategies: { name: true, network: true, params: true },
-          },
-        },
-      });
-      return proposals;
-    };
-
-    getProposals()
-      .then((r) => console.log(r))
-      .catch((e) => console.log(e));
-  }, []);
-  return <div>Proposals</div>;
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Proposal Title</th>
+          <th>Voting Strategies</th>
+          <th>Eligible to Vote</th>
+        </tr>
+      </thead>
+      <tbody>
+        {proposals.map((p) => (
+          <tr key={p.id}>
+            <td>{p.title}</td>
+            <td>
+              {p.space.strategies.map((s, idx) => (
+                <p key={idx}>
+                  {idx + 1}. {s.name}: {s.params.symbol}
+                </p>
+              ))}
+            </td>
+            <td>kek</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 };
 
 export default Proposals;
