@@ -4,21 +4,26 @@ import axios from "axios";
 import config from "../../lib/config";
 
 const create = () => {
-  const [inputs, setInputs] = useState([""]);
+  const [searchSearchInputs, setSearchInputs] = useState([""]);
   const [foundSpaces, setFoundSpaces] = useState([]);
+  const [hubName, setHubName] = useState("");
 
   const { subgraphRequest } = utils;
 
   const handleChange = (e) => {
-    const newInputs = [...inputs];
-    newInputs[e.target.id] = e.target.value;
-    setInputs(newInputs);
+    const newSearchInputs = [...searchSearchInputs];
+    newSearchInputs[e.target.id] = e.target.value;
+    setSearchInputs(newSearchInputs);
+  };
+
+  const handleHubNameChange = (e) => {
+    setHubName(e.target.value);
   };
 
   const handleAddClick = (e) => {
-    const newInputs = [...inputs];
-    newInputs[inputs.length] = "";
-    setInputs(newInputs);
+    const newSearchInputs = [...searchSearchInputs];
+    newSearchInputs[searchSearchInputs.length] = "";
+    setSearchInputs(newSearchInputs);
   };
 
   const handleSearchClick = async (e) => {
@@ -28,7 +33,7 @@ const create = () => {
         __args: {
           first: 100,
           where: {
-            id_in: inputs,
+            id_in: searchSearchInputs,
           },
         },
         id: true,
@@ -40,9 +45,8 @@ const create = () => {
   };
 
   const handlePostClick = async () => {
-    console.log(config.serverBaseUrl + "hubs");
     axios
-      .post(config.serverBaseUrl + "hubs", foundSpaces)
+      .post(config.serverBaseUrl + "hubs", { spaces: foundSpaces, hubName })
       .then((r) => console.log(r))
       .catch((e) => console.log(e));
   };
@@ -51,13 +55,14 @@ const create = () => {
     <div>
       <h1>Search spaces:</h1>
       <button onClick={handleAddClick}>Add field</button>
-      {inputs.map((e, idx) => (
+      {searchSearchInputs.map((e, idx) => (
         <div key={idx}>
+          <label htmlFor={idx}>Space {idx + 1}:</label>
           <input
             onChange={handleChange}
             type="text"
             id={idx}
-            value={inputs[idx]}
+            value={searchSearchInputs[idx]}
           />
         </div>
       ))}
@@ -68,7 +73,18 @@ const create = () => {
           {foundSpaces.map((space) => (
             <p key={space}>{space}</p>
           ))}
-          <button onClick={handlePostClick}>Submit</button>
+          <div>
+            <label htmlFor="hubName">Hub Name:</label>
+            <input
+              type="text"
+              value={hubName}
+              onChange={handleHubNameChange}
+              id="hubName"
+            />
+          </div>
+          <button onClick={handlePostClick} disabled={hubName.length === 0}>
+            Submit
+          </button>
         </>
       )}
     </div>
